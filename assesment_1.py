@@ -60,12 +60,13 @@ action_items_chain = LLMChain(llm=llm, prompt=action_items_prompt)
 
 
 def clean_transcript(transcript):
-    # Remove timestamps and other noise----->[00:01:12] Alice: Good morning, team. We need to finalize the project plan by next Wednesday.
-    transcript = re.sub(r'\d{2}:\d{2}:\d{2}\s*-->\s*\d{2}:\d{2}:\d{2}', '', transcript)  
-    transcript = re.sub(r'\[\d{2}:\d{2}\]','', transcript)  # Remove timestamps like [00:01:12]
-    # removing whaite spaces using regex 
-    transcript = re.sub(r'\s+', ' ', transcript)  # Remove extra whitespace
-    return transcript # Return cleaned transcript
+    # Remove timestamps in the format [hh:mm:ss]
+    transcript = re.sub(r'\[\d{2}:\d{2}:\d{2}\]', '', transcript)  # Matches timestamps  [00:01:12]
+    # Remove timestamps in the format [hh:mm]
+    transcript = re.sub(r'\[\d{2}:\d{2}\]', '', transcript)  # Matches timestamps  [00:01]
+    # Remove extra whitespace
+    transcript = re.sub(r'\s+', ' ', transcript) 
+    return transcript.strip() 
     
 
 def extract_assignees(transcript):
